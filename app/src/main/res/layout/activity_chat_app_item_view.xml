@@ -1,0 +1,120 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="1dp">
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/chat_left_msg_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#FF6E00"
+        app:cardCornerRadius="5dp">
+
+        <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/sender"
+                android:layout_marginLeft="8dp"
+                android:maxWidth="240dp"
+                android:padding="2dp"
+                android:text="hi man, how are you?"
+                android:textColor="#ffffff"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/sender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="John Doe"
+                android:textColor="#ffffff"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/left_channel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/message"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/message"
+                android:padding="2dp"
+                android:text="11:40"
+                android:textColor="#ffffff"
+                android:textSize="10sp" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/chat_right_msg_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layoutDirection="rtl"
+        app:cardBackgroundColor="#8bcb14"
+        app:cardCornerRadius="5dp">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/receviedsender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:textStyle="bold"
+                android:padding="2dp"
+                android:text="jdjjddd"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/text_message_body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/receviedsender"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/rounded_rectangle_green"
+                android:maxWidth="240dp"
+                android:padding="8dp"
+                android:text="hello, hello!"
+                android:textColor="#ffffff"
+                app:layout_constraintBottom_toBottomOf="@+id/receviedsender"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:id="@+id/right_channel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_message_body"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="4dp"
+                android:layout_toLeftOf="@+id/text_message_body"
+
+                android:padding="2dp"
+                android:text="11:40"
+                android:textColor="#ffffff"
+                android:textSize="12sp"
+
+                app:layout_constraintBottom_toBottomOf="@+id/text_message_body"
+                app:layout_constraintRight_toLeftOf="@+id/text_message_body" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
