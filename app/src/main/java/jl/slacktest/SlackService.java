@@ -32,7 +32,6 @@ public class SlackService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        //startServiceWithNotification(text);
     }
 
     @Override
