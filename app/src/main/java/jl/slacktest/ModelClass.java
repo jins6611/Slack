@@ -1,6 +1,6 @@
 package jl.slacktest;
 
-public class ChatAppMsgDTO {
+public class ModelClass {
 
     public final static String MSG_TYPE_SENT = "MSG_TYPE_SENT";
 
@@ -12,7 +12,7 @@ public class ChatAppMsgDTO {
     // Message type.
     private String msgType;
 
-    public ChatAppMsgDTO() {
+    public ModelClass() {
 
     }
 

@@ -16,7 +16,7 @@ public class DBHelper {
     public static final String KEY_ROWID = "_id";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_CHANNEL_NAME = "channelname";
-
+    public static final String KEY_EVENT_TS = "eventts";
 
 
     private static final String TAG = "dbdata";
@@ -28,7 +28,7 @@ public class DBHelper {
      */
     private static final String DATABASE_CREATE =
             "create table messagetable (_id integer primary key autoincrement, "
-                    + "sender varchar, channelname varchar, message varchar,messagetype varchar);";
+                    + "sender varchar, channelname varchar, message varchar,messagetype varchar,eventts varchar);";
 
 
     private static final String DATABASE_NAME = "data.db";
@@ -78,13 +78,14 @@ public class DBHelper {
     }
 
 
-    public long insertMsgDetail(String sender, String channel, String message, String messagetype) {
+    public long insertMsgDetail(String sender, String channel, String message, String messagetype, String eventts) {
 
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_SENDER, sender);
         initialValues.put(KEY_CHANNEL_NAME, channel);
         initialValues.put(KEY_MESSAGE, message);
         initialValues.put(KEY_MESSAGE_TYPE, messagetype);
+        initialValues.put(KEY_EVENT_TS, eventts);
         return mDb.insert(DATABASE_TABLE, null, initialValues);
 
     }
@@ -92,7 +93,15 @@ public class DBHelper {
     public Cursor fetchAllMessage() {
 
         return mDb.query(DATABASE_TABLE, new String[]{KEY_ROWID, KEY_SENDER,
-                KEY_CHANNEL_NAME, KEY_MESSAGE, KEY_MESSAGE_TYPE}, null, null, null, null, null,null);
+                KEY_CHANNEL_NAME, KEY_MESSAGE, KEY_MESSAGE_TYPE}, null, null, null, null, null, null);
+    }
+
+    public int getProfilesCount(String event) {
+        Cursor mCount = mDb.rawQuery("select count(*) from messagetable where eventts='" + event + "'", null);
+        mCount.moveToFirst();
+        int count = mCount.getInt(0);
+        mCount.close();
+        return count;
     }
 
 }

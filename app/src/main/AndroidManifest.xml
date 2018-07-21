@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".JLService"/>
+        <service android:name=".SlackService"/>
     </application>
 
 </manifest>

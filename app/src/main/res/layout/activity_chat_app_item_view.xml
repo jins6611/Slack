@@ -67,7 +67,7 @@
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="8dp">
 
@@ -77,6 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:textStyle="bold"
+                android:layout_alignParentRight="true"
                 android:padding="2dp"
                 android:text="jdjjddd"
                 android:textColor="#ffffff"
@@ -87,11 +88,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/receviedsender"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="8dp"
                 android:background="@drawable/rounded_rectangle_green"
                 android:maxWidth="240dp"
                 android:padding="8dp"
-                android:text="hello, hello!"
+                android:text="hello, helhjhhhjlo!"
                 android:textColor="#ffffff"
                 app:layout_constraintBottom_toBottomOf="@+id/receviedsender"
                 app:layout_constraintRight_toRightOf="parent" />
@@ -102,12 +104,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_message_body"
                 android:layout_marginBottom="5dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="4dp"
                 android:layout_toLeftOf="@+id/text_message_body"
-
                 android:padding="2dp"
-                android:text="11:40"
+                android:text="11:hjhjjhjh"
                 android:textColor="#ffffff"
                 android:textSize="12sp"
 

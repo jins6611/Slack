@@ -39,9 +39,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     /*
-        implementation 'com.github.Ullink:simple-slack-api:1.2.0'
+            implementation 'com.github.Ullink:simple-slack-api:1.2.0'
 
-        compileOnly group: 'javax', name: 'javaee-api', version: '7.0'*/
+            compileOnly group: 'javax', name: 'javaee-api', version: '7.0'*/
     implementation 'com.github.pschroen:slack-api-android:v1.3.0-RELEASE'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:cardview-v7:27.1.1'

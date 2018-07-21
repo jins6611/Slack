@@ -11,17 +11,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatAppMsgAdapter extends RecyclerView.Adapter<ChatAppMsgAdapter.ChatAppMsgViewHolder> {
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatAppMsgViewHolder> {
 
-    private List<ChatAppMsgDTO> msgDtoList = null;
+    private List<ModelClass> msgDtoList = null;
 
-    public ChatAppMsgAdapter(List<ChatAppMsgDTO> msgDtoList) {
+    public ChatAdapter(List<ModelClass> msgDtoList) {
         this.msgDtoList = msgDtoList;
     }
 
     @Override
     public void onBindViewHolder(ChatAppMsgViewHolder holder, int position) {
-        ChatAppMsgDTO msgDto = this.msgDtoList.get(position);
+        ModelClass msgDto = this.msgDtoList.get(position);
         // If the message is a received message.
         if (msgDto.MSG_TYPE_SENT.equals(msgDto.getMsgType())) {
             // Show received message in left linearlayout.
@@ -56,7 +56,7 @@ public class ChatAppMsgAdapter extends RecyclerView.Adapter<ChatAppMsgAdapter.Ch
     @Override
     public int getItemCount() {
         if (msgDtoList == null) {
-            msgDtoList = new ArrayList<ChatAppMsgDTO>();
+            msgDtoList = new ArrayList<ModelClass>();
         }
         return msgDtoList.size();
     }

@@ -1,5 +1,6 @@
 package jl.slacktest;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -28,17 +28,17 @@ import allbegray.slack.webapi.SlackWebApiClient;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TOKEN = "xoxp-362211397057-396183436321-396957814656-f85f833f27f819a23d95bb0d09477fe4";
+    private static final String TOKEN = "xoxp-362211397057-396183436321-401508129764-69dc6e56b9f99cc8860aaba5b2765d08";
     SlackRealTimeMessagingClient mRtmClient;
     SlackWebApiClient webApiClient;
-    String stat, text, userName;
+    String stat, text, userName, eventts;
     TextView status;
     Channel channel;
     EditText msgbox;
     Button send;
     RecyclerView msglist;
-    ArrayList<ChatAppMsgDTO> msglists = new ArrayList<>();
-    ChatAppMsgAdapter chatAppMsgAdapter;
+    ArrayList<ModelClass> msglists = new ArrayList<>();
+    ChatAdapter chatAppMsgAdapter;
     DBHelper meDbHelper;
 
     @Override
@@ -48,11 +48,7 @@ public class MainActivity extends AppCompatActivity {
         meDbHelper = new DBHelper(this);
         meDbHelper.open();
 
-        if (mRtmClient == null) {
-            Toast.makeText(getApplicationContext(), "connected", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(getApplicationContext(), "not", Toast.LENGTH_LONG).show();
-        }
+        SharedPreference.getInstance(getApplicationContext()).setServiceStarted("no");
         status = (TextView) findViewById(R.id.status);
         msgbox = (EditText) findViewById(R.id.msgbox);
         send = (Button) findViewById(R.id.send);
@@ -69,9 +65,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         webApiClient = SlackClientFactory.createWebApiClient(TOKEN);
-        // mWebApiClient = SlackClientFactory.createWebApiClient(slackToken);
         String webSocketUrl = webApiClient.startRealTimeMessagingApi().findPath("url").asText();
-        Toast.makeText(getApplicationContext(), webSocketUrl, Toast.LENGTH_LONG).show();
         mRtmClient = new SlackRealTimeMessagingClient(webSocketUrl, null);
 
         send.setOnClickListener(new View.OnClickListener() {
@@ -85,11 +79,9 @@ public class MainActivity extends AppCompatActivity {
                 } catch (SlackResponseErrorException e) {
                     channel = null;
                 }
-                //msglists.add(new ChatAppMsgDTO(ChatAppMsgDTO.MSG_TYPE_SENT, msg, channel.getName(), "me"));
-                meDbHelper.insertMsgDetail("Me", channel.getName(), msg, ChatAppMsgDTO.MSG_TYPE_SENT);
+                meDbHelper.insertMsgDetail("Me", channel.getName(), msg, ModelClass.MSG_TYPE_SENT, "2");
                 getDatafrmDB();
-               /* chatAppMsgAdapter = new ChatAppMsgAdapter(msglists);
-                msglist.setAdapter(chatAppMsgAdapter);*/
+
             }
         });
 
@@ -113,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         mRtmClient.addListener(Event.MESSAGE, new allbegray.slack.rtm.EventListener() {
             @Override
             public void handleMessage(JsonNode message) {
@@ -121,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 final String subtype = message.findPath("subtype").asText();
                 String bt_id = message.findPath("bot_id").asText();
                 text = message.findPath("text").asText();
+                eventts = message.findPath("event_ts").asText();
                 if (!userId.equals("")) {
                     User user = webApiClient.getUserInfo(userId);
                     userName = user.getName();
@@ -139,68 +133,43 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (!subtype.equals("me_message")) {
-                            //msglists.add(new ChatAppMsgDTO(ChatAppMsgDTO.MSG_TYPE_RECEIVED, text, channel.getName(), userName));
-                            meDbHelper.insertMsgDetail(userName, channel.getName(), text, ChatAppMsgDTO.MSG_TYPE_RECEIVED);
-                            getDatafrmDB();
-                            /*int newMsgPosition = msglists.size() - 1;
+                            if (SharedPreference.getInstance(getApplicationContext()).getServiceStarted("").equals("no")) {
+                                int count = meDbHelper.getProfilesCount(eventts);
+                                if (count > 0) {
 
-                            // Notify recycler view insert one new data.
-
-                            chatAppMsgAdapter = new ChatAppMsgAdapter(msglists);
-                            chatAppMsgAdapter.notifyItemInserted(newMsgPosition);
-
-                            // Scroll RecyclerView to the last message.
-                            msglist.scrollToPosition(newMsgPosition);*/
+                                } else {
+                                    meDbHelper.insertMsgDetail(userName, channel.getName(), text, ModelClass.MSG_TYPE_RECEIVED, eventts);
+                                    getDatafrmDB();
+                                }
+                            }
                         }
                     }
                 });
-             /*   if (userId != null) {
-                    Channel channel;
-                    try {
-                        channel = webApiClient.getChannelInfo(channelId);
-                    } catch (SlackResponseErrorException e) {
-                        channel = null;
-                    }
-                    User user = webApiClient.getUserInfo(userId);
-                    String userName = user.getName();
-
-                    System.out.println("Channel id: " + channelId);
-                    System.out.println("Channel name: " + (channel != null ? "#" + channel.getName() : "DM"));
-                    System.out.println("User id: " + userId);
-                    System.out.println("User name: " + userName);
-                    System.out.println("Text: " + text);
-
-                    // Copy cat
-                    webApiClient.meMessage(channelId, userName + ": " + text);
-                }*/
-
 
             }
         });
 
-
-        mRtmClient.addListener("message", new EventListener() {
-            @Override
-            public void handleMessage(JsonNode jsonNode) {
-            }
-        });
         mRtmClient.connect();
         getDatafrmDB();
-    }/**/
+    }
 
     @Override
     protected void onStop() {
         super.onStop();
-        /*Intent i = new Intent(getApplicationContext(), MyService.class);
-        startService(i);*/
 
+        String C = "jl.slacktest";
+        Intent startIntent = new Intent(getApplicationContext(), SlackService.class);
+        startIntent.setAction(C);
+        startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startService(startIntent);
+        finishAffinity();
+        SharedPreference.getInstance(getApplicationContext()).setServiceStarted("yes");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //Intent i = new Intent(getApplicationContext(), MyService.class);
-        // startService(i);
+
     }
 
     public void getDatafrmDB() {
@@ -210,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         if (notesCursor.moveToFirst()) {
 
             do {
-                ChatAppMsgDTO md = new ChatAppMsgDTO();
+                ModelClass md = new ModelClass();
                 md.setSname(notesCursor.getString(notesCursor.getColumnIndexOrThrow("sender")));
                 md.setChannel_name(notesCursor.getString(notesCursor.getColumnIndexOrThrow("channelname")));
                 md.setMsgContent(notesCursor.getString(notesCursor.getColumnIndexOrThrow("message")));
@@ -219,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
             } while (notesCursor.moveToNext());
         }
         if (msglist.getAdapter() == null) {
-            chatAppMsgAdapter = new ChatAppMsgAdapter(msglists);
+            chatAppMsgAdapter = new ChatAdapter(msglists);
             msglist.setAdapter(chatAppMsgAdapter);
             chatAppMsgAdapter.notifyDataSetChanged();
         } else {
@@ -228,6 +197,12 @@ public class MainActivity extends AppCompatActivity {
             msglist.smoothScrollToPosition(newMsgPosition);
 
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
 }
