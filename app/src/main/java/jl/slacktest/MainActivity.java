@@ -28,7 +28,6 @@ import allbegray.slack.webapi.SlackWebApiClient;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TOKEN = "xoxp-362211397057-396183436321-401508129764-69dc6e56b9f99cc8860aaba5b2765d08";
     SlackRealTimeMessagingClient mRtmClient;
     SlackWebApiClient webApiClient;
     String stat, text, userName, eventts;
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             StrictMode.setThreadPolicy(policy);
         }
 
-        webApiClient = SlackClientFactory.createWebApiClient(TOKEN);
+        webApiClient = SlackClientFactory.createWebApiClient(Constant.TOKEN);
         String webSocketUrl = webApiClient.startRealTimeMessagingApi().findPath("url").asText();
         mRtmClient = new SlackRealTimeMessagingClient(webSocketUrl, null);
 
